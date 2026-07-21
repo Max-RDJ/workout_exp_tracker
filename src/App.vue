@@ -1,64 +1,90 @@
 <script setup>
 import { ref } from 'vue';
-import exercise_list_data from './exercise_list.json' with { type: 'json' };
+import skill_list_data from './skill_list.json' with { type: 'json' };
+import { SKILL_LEVELS } from './skill_levels.js';
 import IncrementButton from './IncrementButton.vue';
+import LevelUpPanel from './LevelUpPanel.vue';
 
-const exerciseList = ref(exercise_list_data);
+const skillList = ref(skill_list_data);
+const levelUpSkill = ref(null);
+const showLevelUpPanel = ref(false);
 
-function updateCount(item, amount) {
-  item.count += amount;
-  saveExerciseList();
+function updateCount(skill, amount) {
+  skill.count += amount;
+  updateLevel(skill);
+  saveSkillList();
 }
 
-function saveExerciseList() {
-  localStorage.setItem('exerciseList', JSON.stringify(exerciseList.value));
-}
-
-function loadExerciseList() {
-  const savedList = localStorage.getItem('exerciseList');
-  if (savedList) {
-    exerciseList.value = JSON.parse(savedList);
+function updateLevel(skill) {
+  while (
+    skill.level < 99 &&
+    skill.count >= SKILL_LEVELS[skill.level + 1]
+  ) {
+    skill.level++;
+    levelUpSkill.value = skill;
+    showLevelUpPanel.value = true;
   }
 }
 
-loadExerciseList();
+function saveSkillList() {
+  localStorage.setItem('skillList', JSON.stringify(skillList.value));
+}
+
+function loadSkillList() {
+  const savedList = localStorage.getItem('skillList');
+  if (savedList) {
+    skillList.value = JSON.parse(savedList);
+  }
+}
+
+loadSkillList();
 </script>
 
 <template>
   <main class="app">
-    <section class="exercise-list">
+    <section class="skill-list">
       <article
-        v-for="item in exerciseList"
-        :key="item.exercise_name"
-        class="exercise-card"
+        v-for="skill in skillList"
+        :key="skill.skill_name"
+        class="skill-card"
       >
-        <h2>{{ item.exercise_name }}</h2>
+        <div class="skill-header">
+          <h2>{{ skill.skill_name }}</h2>
+          <h2>{{ skill.level }}</h2>
+        </div>
 
         <div class="controls">
           <IncrementButton
             :incrementValue="-10"
-            @increment="updateCount(item, $event)"
+            @increment="updateCount(skill, $event)"
           />
 
           <IncrementButton
             :incrementValue="-1"
-            @increment="updateCount(item, $event)"
+            @increment="updateCount(skill, $event)"
           />
 
-          <strong>{{ item.count }}</strong>
+          <strong>{{ Intl.NumberFormat().format(skill.count) }}</strong>
 
           <IncrementButton
             :incrementValue="1"
-            @increment="updateCount(item, $event)"
+            @increment="updateCount(skill, $event)"
           />
 
           <IncrementButton
             :incrementValue="10"
-            @increment="updateCount(item, $event)"
+            @increment="updateCount(skill, $event)"
           />
         </div>
       </article>
     </section>
+
+    <LevelUpPanel
+      v-if="showLevelUpPanel"
+      :skill="levelUpSkill"
+      @close="showLevelUpPanel = false"
+    />
+    
   </main>
 </template>
 

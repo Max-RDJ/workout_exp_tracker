@@ -1,0 +1,22 @@
+[
+    {
+        "skill_name": "Push-ups",
+        "count": 0,
+        "level": 1
+    },
+    {
+        "skill_name": "Bicep Curls",
+        "count": 0,
+        "level": 1
+    },
+    {
+        "skill_name": "Crunches",
+        "count": 0,
+        "level": 1
+    },
+    {
+        "skill_name": "Tricep Raises",
+        "count": 0,
+        "level": 1
+    }
+]
