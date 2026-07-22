@@ -1,13 +1,19 @@
 <script setup>
 import { ref } from 'vue';
 import skill_list_data from './skill_list.json' with { type: 'json' };
-import { SKILL_LEVELS } from './skill_levels.js';
+import { SKILL_LEVELS } from './javascript/skill_levels.js';
+
 import IncrementButton from './IncrementButton.vue';
 import LevelUpPanel from './LevelUpPanel.vue';
+
+import { playLevelUp, toggleMute, isMuted } from './javascript/audio.js';
 
 const skillList = ref(skill_list_data);
 const levelUpSkill = ref(null);
 const showLevelUpPanel = ref(false);
+const showAddSkill = ref(false);
+const newSkillName = ref('');
+
 
 function updateCount(skill, amount) {
   skill.count += amount;
@@ -23,6 +29,7 @@ function updateLevel(skill) {
     skill.level++;
     levelUpSkill.value = skill;
     showLevelUpPanel.value = true;
+    playLevelUp();
   }
   else if (
     skill.level > 1 &&
@@ -30,6 +37,24 @@ function updateLevel(skill) {
   ) {
     skill.level--;
   }
+}
+
+function addSkill() {
+  if (newSkillName.value.trim() !== '') {
+    skillList.value.push({
+      skill_name: newSkillName.value.trim(),
+      level: 1,
+      count: 0
+    });
+    newSkillName.value = '';
+    showAddSkill.value = false;
+    saveSkillList();
+    refreshSkillList();
+  }
+}
+
+function refreshSkillList() {
+  skillList.value = [...skillList.value];
 }
 
 function saveSkillList() {
@@ -83,6 +108,23 @@ loadSkillList();
           />
         </div>
       </article>
+
+      <div class="add-skill-button" v-if="!showAddSkill">
+        <button @click="showAddSkill = true">+</button>
+      </div>
+
+      <div class="add-skill" v-if="showAddSkill">
+        <input
+          v-model="newSkillName"
+          type="text"
+          placeholder="New skill name"
+          class="add-skill-input"
+        />
+        <div class="add-skill-buttons">
+          <button @click="showAddSkill = false" class="button-cancel">X</button>
+          <button @click="addSkill" class="button-confirm">✓</button>
+        </div>
+      </div>
     </section>
 
     <LevelUpPanel

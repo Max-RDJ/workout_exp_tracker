@@ -113,6 +113,15 @@ button:hover {
 button:active {
   transform: scale(0.95);
   background: #2d2d36;
+  font-size: 1.05rem;
+}
+
+.button-confirm {
+  background: #499b49;
+}
+
+.button-cancel {
+  background: #9b4c49;
 }
 
 strong {
@@ -121,17 +130,48 @@ strong {
   font-weight: 700;
 }
 
+.add-skill {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.add-skill-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.add-skill-button button {
+  background: #303038;
+}
+
+.add-skill-input {
+  width: 100%;
+  height: 2.4rem;
+  padding: 0 0.75rem;
+  border-radius: 0.8rem;
+  border: 1px solid #303038;
+  background: #202027;
+  color: #fff;
+}
+
 .level-up-panel {
   position: fixed;
-  left: 0;
-  bottom: 0;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
 
-  width: 100%;
+  width: calc(100% - 2rem);
+  max-width: 600px;
+
   min-height: 180px;
+  max-height: 200px;
   padding: 1.5rem;
 
   background: rgba(18, 18, 22, 0.96);
-  border-top: 1px solid #303038;
+  border: 1px solid #303038;
+  border-radius: 25px;
 
   display: flex;
   flex-direction: column;
@@ -152,12 +192,10 @@ strong {
   min-width: 90px;
   height: 2.4rem;
   padding: 0 1.25rem;
-
+  border: none;
   background: transparent;
-  border: 1px solid #555;
   color: #bbb;
   font-size: 0.9rem;
-  border-radius: 999px;
 }
 
 .level-up-panel button:hover {
