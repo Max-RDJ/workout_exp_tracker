@@ -16,13 +16,19 @@ function updateCount(skill, amount) {
 }
 
 function updateLevel(skill) {
-  while (
+  if (
     skill.level < 99 &&
     skill.count >= SKILL_LEVELS[skill.level + 1]
   ) {
     skill.level++;
     levelUpSkill.value = skill;
     showLevelUpPanel.value = true;
+  }
+  else if (
+    skill.level > 1 &&
+    skill.count < SKILL_LEVELS[skill.level]
+  ) {
+    skill.level--;
   }
 }
 
